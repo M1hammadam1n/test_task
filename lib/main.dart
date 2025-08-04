@@ -1,6 +1,7 @@
-import 'package:dio/dio.dart' show Dio;
 import 'package:flutter/material.dart';
-import 'package:test_task/Page/test_home.dart';
+import 'package:provider/provider.dart';
+import 'package:test_task/Page/character_provider.dart';
+import 'package:test_task/Page/card_list.dart';
 
 void main(List<String> args) {
   runApp(MyApp());
@@ -11,6 +12,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false, home: TestHome());
+    return ChangeNotifierProvider(create: (_) => CardProvider(),
+    child: MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const CardList(),
+    ),
+    );
   }
 }
