@@ -12,11 +12,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(create: (_) => CardProvider(),
-    child: MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: const CardList(),
-    ),
+    return ChangeNotifierProvider(
+      create: (_) => CardProvider(),
+      //Регистрирует CardProvider в дереве виджетов.
+      //Делает его доступным в любом месте ниже по дереву.
+      //create: (_) => CardProvider() — создаёт экземпляр провайдера.
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: const CardList(),
+      ),
     );
   }
 }
