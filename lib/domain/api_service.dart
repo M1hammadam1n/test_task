@@ -21,4 +21,21 @@ class ApiService {
       //Если запрос не удался то возвращает failed
     }
   }
+
+  Future<Character> getCharacterById(int id) async {
+    print('id for provider = ${id}');
+    //Объявляется Future, который вернёт один объект Character.
+    try {
+      final response = await _dio.get(
+        "https://rickandmortyapi.com/api/character/$id",
+      );
+      //Отправляется GET запрос на https://rickandmortyapi.com/api/character/1, 2, 3, и т.д. в зависимости от id.
+
+      return Character.fromJson(response.data);
+      //Данные (в формате JSON) передаются в твой конструктор Character.fromJson, который возвращает готовый объект.
+    } catch (e) {
+      throw Exception('Errors for id');
+      //Если возникла ошибка (например, сервер недоступен или id не существует) — выбрасывается Exception.
+    }
+  }
 }

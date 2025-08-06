@@ -38,3 +38,20 @@ class CardProvider with ChangeNotifier {
     //После получения данных (или ошибки), снова уведомляет UI — перерисовать экран.
   }
 }
+
+class FavoriteProvider extends ChangeNotifier {
+  final List<int> _favorites = [];
+
+  List<int> get favorites => _favorites;
+
+  void toggleFavorite(int id) {
+    if (_favorites.contains(id)) {
+      _favorites.remove(id);
+    } else {
+      _favorites.add(id);
+    }
+    notifyListeners();
+  }
+
+  bool isFavorite(int id) => _favorites.contains(id);
+}
