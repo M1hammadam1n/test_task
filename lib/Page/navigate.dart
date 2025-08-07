@@ -31,13 +31,13 @@ class _BottomNavigationBarExampleState
     CardList(),
     FavoritePage(),
   ];
-// Список виджетов для отображения в зависимости от выбранного индекса. 
+  // Список виджетов для отображения в зависимости от выбранного индекса.
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
-// Метод для обновления состояния при выборе элемента навигации.  
+  // Метод для обновления состояния при выборе элемента навигации.
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +46,7 @@ class _BottomNavigationBarExampleState
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false,
         showUnselectedLabels: false,
-        // Отображает нижнюю навигационную панель без меток.  
+        // Отображает нижнюю навигационную панель без меток.
         backgroundColor: AppTheme.black80,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -55,8 +55,8 @@ class _BottomNavigationBarExampleState
               width: 26,
               height: 26,
             ),
-            // Иконка для первого элемента навигации (Rick Sanchez).
 
+            // Иконка для первого элемента навигации (Rick Sanchez).
             label: '',
           ),
           BottomNavigationBarItem(

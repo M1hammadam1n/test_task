@@ -21,6 +21,8 @@ class _CardListState extends State<CardList> {
   void initState() {
     //Метод initState вызывается один раз при создании виджета.
     super.initState();
+    _scrollController = ScrollController()..addListener(_onScroll);
+
     Future.microtask(() async {
       //Асинхронная задача ставится в очередь — microtask запускается после завершения синхронизации виджета.
       final provider = Provider.of<CardProvider>(context, listen: false);
@@ -30,6 +32,25 @@ class _CardListState extends State<CardList> {
       await saveAllImages(provider.characters);
       //Сохраняем изображения всех персонажей (функция saveAllImages предполагается где-то определена — ты её не показал)
     });
+  }
+
+  late ScrollController _scrollController;
+  // Создаём ScrollController для отслеживания прокрутки списка.
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      final provider = Provider.of<CardProvider>(context, listen: false);
+      if (!provider.isLoadingMore && provider.hasMore) {
+        provider.fetchMoreCharacters(); // загружаем следующую страницу
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -75,8 +96,18 @@ class _CardListState extends State<CardList> {
                 //Показываем сообщение об ошибке.
                 case Status.success:
                   return ListView.builder(
-                    itemCount: provider.characters.length,
+                    controller: _scrollController,
+                    itemCount:
+                        provider.characters.length + (provider.hasMore ? 1 : 0),
                     itemBuilder: (context, index) {
+                      if (index == provider.characters.length) {
+                        return const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(16.0),
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
+                      }
                       final character = provider.characters[index];
                       //Показываем список карточек персонажей.
                       final favoriteProvider = Provider.of<FavoriteProvider>(
@@ -105,12 +136,23 @@ class _CardListState extends State<CardList> {
                             ),
                           ),
                           //Отображаем имя персонажа.
-                          subtitle: Text(
-                            'Status: ${character.status}',
-                            style: TextStyle(
-                              color: AppTheme.white70,
-                              fontWeight: FontWeight.w400,
-                            ),
+                          subtitle: Row(
+                            children: [
+                              Text(
+                                'Status: ${character.status}',
+                                style: TextStyle(
+                                  color: AppTheme.white70,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              Text('  Id:${character.id}',
+                                  style: TextStyle(
+                                    color: AppTheme.white70,
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: 12
+                                  )),
+                              //Отображаем ID персонажа.
+                            ],
                           ),
                           // Отображаем статус персонажа.
                           trailing: IconButton(
@@ -126,10 +168,10 @@ class _CardListState extends State<CardList> {
                                       width: 24,
                                       height: 24,
                                       color: AppTheme.white,
-                                    ),// Показываем иконку избранного в зависимости от состояния.
+                                    ), // Показываем иконку избранного в зависимости от состояния.
                             onPressed: () async {
                               favoriteProvider.toggleFavorite(character.id);
-// Добавляем или удаляем персонажа из избранного.
+                              // Добавляем или удаляем персонажа из избранного.
                               // Сохранить изображение персонажа в SharedPreferences
                               final response = await HttpClient().getUrl(
                                 Uri.parse(character.image),
@@ -151,7 +193,7 @@ class _CardListState extends State<CardList> {
                                   (p, e) => p..addAll(e),
                                 ),
                               );
-                              
+
                               final base64Image = base64Encode(imageBytes);
 
                               final prefs =

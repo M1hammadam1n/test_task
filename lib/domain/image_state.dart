@@ -5,12 +5,15 @@ import 'package:test_task/domain/json.dart';
 
 Future<void> saveAllImages(List<Character> characters) async {
   final prefs = await SharedPreferences.getInstance();
-
+  // Получаем экземпляр SharedPreferences для сохранения данных.
+  // SharedPreferences позволяет сохранять данные в локальном хранилище устройства.
+  // Используется для кэширования изображений персонажей.
+  // Получаем экземпляр SharedPreferences для сохранения данных.
   for (final character in characters) {
     final alreadySaved = prefs.containsKey('saved_image_${character.id}');
     if (alreadySaved) continue; // Пропускаем, если уже сохранено
-// Проверяем, сохранено ли изображение для данного персонажа.
-// Если сохранено, пропускаем его.  
+    // Проверяем, сохранено ли изображение для данного персонажа.
+    // Если сохранено, пропускаем его.
     try {
       final response = await HttpClient().getUrl(Uri.parse(character.image));
       final imageBytes = await response.close().then(
@@ -26,6 +29,6 @@ Future<void> saveAllImages(List<Character> characters) async {
       print("Ошибка при сохранении image ${character.id}: $e");
     }
     // Если произошла ошибка при получении изображения, выводим сообщение об ошибке.
-    // Используем try-catch для обработки возможных ошибок при запросе изображения. 
+    // Используем try-catch для обработки возможных ошибок при запросе изображения.
   }
 }
