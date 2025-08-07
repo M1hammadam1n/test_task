@@ -41,10 +41,11 @@ class CardProvider with ChangeNotifier {
 
 class FavoriteProvider extends ChangeNotifier {
   final List<int> _favorites = [];
-
+// Список избранных персонажей по их ID.  
   List<int> get favorites => _favorites;
-
+// Возвращает список избранных персонажей.
   void toggleFavorite(int id) {
+    // Переключает состояние избранного для персонажа с данным id.
     if (_favorites.contains(id)) {
       _favorites.remove(id);
     } else {
@@ -52,6 +53,10 @@ class FavoriteProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+// Уведомляет слушателей об изменении списка избранных персонажей.
+  // Если id уже есть в списке, удаляет его, иначе добавляет.   
 
   bool isFavorite(int id) => _favorites.contains(id);
+// Проверяет, есть ли id в списке избранных персонажей.
+  // Возвращает true, если есть, иначе false. 
 }

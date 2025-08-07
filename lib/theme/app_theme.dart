@@ -16,4 +16,6 @@ class AppTheme {
   static const Color redAccent = Color.fromARGB(255, 255, 82, 82);
   static const Color white54 = Color.fromARGB(137, 255, 255, 255);
   static const Color black90 = const Color.fromARGB(255, 15, 15, 15);
+// Цвета для темы приложения, используемые в различных виджетах и экранах.
+  // Эти цвета можно использовать для настройки внешнего вида приложения.
 }

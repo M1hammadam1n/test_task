@@ -15,19 +15,22 @@ class FavoritePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final favoriteProvider = Provider.of<FavoriteProvider>(context);
     final favoriteIds = favoriteProvider.favorites;
+// Получаем список избранных персонажей из FavoriteProvider.
 
     return Scaffold(
       backgroundColor: AppTheme.black,
       appBar: AppBar(
         title: Text('Избранные', style: TextStyle(color: AppTheme.White30)),
         backgroundColor: AppTheme.black80,
-      ),
+      ),// Создаём AppBar с заголовком "Избранные" и стилем из темы.
+      // AppBar с заголовком "Избранные" и цветом из темы.
       body: Stack(
         children: [
           Image.network(
             'https://cs11.pikabu.ru/post_img/big/2019/11/29/6/1575016478113464227.png',
             fit: BoxFit.cover,
           ),
+          // Фоновое изображение для страницы избранных персонажей.
           Center(
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 0.0, sigmaY: 0.0),
@@ -37,11 +40,19 @@ class FavoritePage extends StatelessWidget {
               ),
             ),
           ),
+          // Применяем эффект размытия к фону с помощью BackdropFilter.
+          // Контейнер с полупрозрачным черным фоном.
+          // Этот контейнер используется для затемнения фона и создания эффекта размытия.
+          // Он занимает всю область экрана и центрирует содержимое.
+          // Центрируем содержимое внутри размытого контейнера.
           favoriteIds.isEmpty
               ? const Center(child: Text('Список избранного пуст'))
               : ListView.builder(
                 itemCount: favoriteIds.length,
                 itemBuilder: (context, index) {
+                  // Создаём ListView для отображения избранных персонажей.
+                  // Используем FutureBuilder для асинхронной загрузки данных о персонаже по  id.
+                  // Получаем id избранного персонажа по индексу.
                   final id = favoriteIds[index];
                   return FutureBuilder<Character>(
                     future: ApiService().getCharacterById(id),
@@ -53,6 +64,7 @@ class FavoritePage extends StatelessWidget {
                           title: Text('Ошибка: ${snapshot.error}'),
                         );
                       } else if (snapshot.hasData) {
+                        // Если данные успешно загружены, отображаем карточку персонажа.  
                         final character = snapshot.data!;
                         final isFav = favoriteProvider.isFavorite(character.id);
                         return GestureDetector(
@@ -65,6 +77,9 @@ class FavoritePage extends StatelessWidget {
                               ),
                             );
                           },
+                          // При нажатии на карточку персонажа, переходим на экран CardDetails.
+                          // Оборачиваем карточку в GestureDetector — при нажатии переходим на экран CardDetails. 
+
                           child: ListTile(
                             leading: Image.network(character.image, width: 50),
                             title: Text(
@@ -74,6 +89,8 @@ class FavoritePage extends StatelessWidget {
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
+                            // Отображаем имя персонажа.
+                            // Отображаем статус персонажа. 
                             subtitle: Text(
                               'Status: ${character.status}',
                               style: TextStyle(
@@ -81,6 +98,8 @@ class FavoritePage extends StatelessWidget {
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
+                            // Показываем иконку избранного в зависимости от состояния. 
+
                             trailing: IconButton(
                               icon:
                                   isFav
@@ -99,11 +118,13 @@ class FavoritePage extends StatelessWidget {
                                 favoriteProvider.toggleFavorite(character.id);
                               },
                             ),
+                            // Добавляем или удаляем персонажа из избранного. 
                           ),
                         );
                       } else {
                         return const ListTile(title: Text('Нет данных'));
                       }
+                      // Если данные не загружены, отображаем сообщение "Нет данных".
                     },
                   );
                 },

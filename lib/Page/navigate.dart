@@ -12,12 +12,13 @@ class BottomNavigationBarExampleApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: BottomNavigationBarExample(),
     );
+    //Создаёт MaterialApp с BottomNavigationBarExample в качестве домашней страницы.
+    //debugShowCheckedModeBanner: false убирает баннер отладки в правом верхнем углу.
   }
 }
 
 class BottomNavigationBarExample extends StatefulWidget {
   const BottomNavigationBarExample({super.key});
-
   @override
   State<BottomNavigationBarExample> createState() =>
       _BottomNavigationBarExampleState();
@@ -30,12 +31,13 @@ class _BottomNavigationBarExampleState
     CardList(),
     FavoritePage(),
   ];
-
+// Список виджетов для отображения в зависимости от выбранного индекса. 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
+// Метод для обновления состояния при выборе элемента навигации.  
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +46,7 @@ class _BottomNavigationBarExampleState
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false,
         showUnselectedLabels: false,
+        // Отображает нижнюю навигационную панель без меток.  
         backgroundColor: AppTheme.black80,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -52,6 +55,8 @@ class _BottomNavigationBarExampleState
               width: 26,
               height: 26,
             ),
+            // Иконка для первого элемента навигации (Rick Sanchez).
+
             label: '',
           ),
           BottomNavigationBarItem(
@@ -60,11 +65,14 @@ class _BottomNavigationBarExampleState
               width: 26,
               height: 26,
             ),
+            // Иконка для второго элемента навигации (Избранное).
+            // Изображение звезды для избранных персонажей.
             label: '',
           ),
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
+        // Обработчик нажатия на элемент навигации.
       ),
     );
   }
